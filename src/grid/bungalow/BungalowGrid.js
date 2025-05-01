@@ -462,7 +462,6 @@ const BungalowGrid = () => {
                 fontSize: '18px',
                 color: 'black',
                 boxSizing: 'border-box',
-                zIndex: 100,
                 ...borders,
               }}
             >
@@ -515,7 +514,6 @@ const BungalowGrid = () => {
                 fontSize: '18px',
                 color: 'black',
                 boxSizing: 'border-box',
-                zIndex: 100,
                 ...borders,
               }}
             >
