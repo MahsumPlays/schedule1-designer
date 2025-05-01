@@ -3,7 +3,6 @@ import { useDrop } from 'react-dnd';
 import GridLayout from 'react-grid-layout';
 import '../CustomGrid.scss';
 import './BungalowGrid.scss';
-import { B } from '@angular/cdk/keycodes';
 
 const BungalowGrid = () => {
   const cols = 24;

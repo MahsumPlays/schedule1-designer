@@ -10,7 +10,6 @@ const BarnsGrid = () => {
   const colsUf = 18;
   const rowsUf = 11;
   const cellSize = 20;
-  const cellSizeUf = 40;
   const gridWidth = cols * cellSize;
   const gridHeight = rows * cellSize;
   const gridWidthUf = colsUf * cellSize;
