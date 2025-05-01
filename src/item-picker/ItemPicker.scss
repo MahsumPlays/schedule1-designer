@@ -1,0 +1,32 @@
+.item-picker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    padding-top: 10px;
+}
+
+.item-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Zwei gleich breite Spalten */
+    gap: 8px; /* Abstand zwischen den Items */
+    align-items: start;
+    max-height: 45rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px;
+    background-color: #7867d6;
+}
+
+.dragged-image {
+    width: 100px;
+}
+
+.item-list::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .item-list::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+  }

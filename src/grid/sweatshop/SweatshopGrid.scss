@@ -1,0 +1,18 @@
+.border-cell {
+    position: absolute;
+    background-color: #768197;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.rgl-bg-sweatshop {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(to right, #ccc 1px, transparent 1px),
+      linear-gradient(to bottom, #ccc 1px, transparent 1px);
+    background-size: 30px 30px;
+    z-index: 0;
+    pointer-events: none;
+  }
