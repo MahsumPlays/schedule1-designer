@@ -51,7 +51,7 @@ const DraggableItem = ({ item }) => {
       <img
         src={item.image}
         alt={item.name}
-        style={{ width: 60, height: 60, objectFit: 'contain' }}
+        style={{ width: 70, height: 70, objectFit: 'contain' }}
       />
       <div className="item-label">{item.name}</div>
     </div>
