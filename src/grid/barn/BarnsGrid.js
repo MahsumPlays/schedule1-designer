@@ -243,7 +243,7 @@ const BarnsGrid = () => {
           setLayoutKeyUf(prev => prev + 1);
         }
       }
-      if (event.key.toLowerCase() === 'd') {
+      if (event.key === 'Delete' || event.key === 'Backspace' || event.key.toLowerCase() === 'd') {
         if (floorRef.current === 0) {
           setLayout(prev => prev.filter(item => item.i !== activeItemKey));
           setLayoutKey(prev => prev + 1); 
@@ -312,7 +312,7 @@ const BarnsGrid = () => {
     <div className="custom-grid-container">
       <div className='grid-floor-switch' style={{ marginBottom: '10px' }}>
         <Button type='button' size='lg' onClick={() => {handleButtonSwitchFloor()}}
-          className='btn btn-default'>Switch Floor</Button>
+          className='btn btn-primary'>Switch Floor</Button>
       </div>
       {floor === 0 && (
       <div

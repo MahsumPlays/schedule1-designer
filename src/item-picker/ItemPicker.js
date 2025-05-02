@@ -45,11 +45,6 @@ const DraggableItem = ({ item }) => {
       className="draggable-item"
       style={{
         opacity: isDragging ? 0.5 : 1,
-        cursor: 'grab',
-        margin: '8px',
-        padding: '10px',
-        background: '#eee',
-        border: '1px solid #ccc',
       }}
     >
       {previewImg && <DragPreviewImage connect={preview} src={previewImg} />}
@@ -66,13 +61,16 @@ const DraggableItem = ({ item }) => {
 const ItemPicker = ({ items }) => {
   return (
     <div className="item-picker">
-      <div className="item-list">
-        {items.map((item) => (
-          <DraggableItem key={item.type} item={item} />
-        ))}
+      <div className="item-list-outer">
+        <div className="item-list">
+          {items.map((item) => (
+            <DraggableItem key={item.type} item={item} />
+          ))}
+        </div>
       </div>
     </div>
   );
 };
+
 
 export default ItemPicker;

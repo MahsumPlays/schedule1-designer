@@ -159,8 +159,8 @@ const BarnsGrid = () => {
           );
           setLayoutKey(prev => prev + 1);
       }
-      if (event.key.toLowerCase() === 'd') {
-          setLayout(prev => prev.filter(item => item.i !== activeItemKey));
+      if (event.key === 'Delete' || event.key === 'Backspace' || event.key.toLowerCase() === 'd') {
+        setLayout(prev => prev.filter(item => item.i !== activeItemKey));
           setLayoutKey(prev => prev + 1); 
       }
     };

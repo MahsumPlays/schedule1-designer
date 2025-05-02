@@ -23,6 +23,12 @@ function App() {
           <ItemPicker items={furnitureItems} />
           <CustomGrid selectedBuilding={selectedBuilding} />
         </DndProvider>
+        <div className='tutorial'>
+            <h2>Controls</h2>
+            <p>Click and drag to place items on the grid</p>
+            <p>Press R to rotate last dragged item</p>
+            <p>Press Delete to remove last dragged item</p>
+          </div>
       </div>
     </div>
   );

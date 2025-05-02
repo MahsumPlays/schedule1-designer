@@ -1,32 +1,52 @@
+@import '../styles/variables'; 
+
 .item-picker {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 200px;
-    padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  padding-top: 10px;
+}
+
+.item-list-outer {
+  background-color: $tertiary;
+  border-radius: 1rem;
+  overflow: hidden; // wichtig: verhindert Überlauf der Scrollbar
+  width: 100%; // passt zur Breite von .item-picker
 }
 
 .item-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Zwei gleich breite Spalten */
-    gap: 8px; /* Abstand zwischen den Items */
-    align-items: start;
-    max-height: 45rem;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 10px;
-    background-color: #7867d6;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  align-items: start;
+  max-height: 45rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+  padding-right: 6px; // optional: Platz für Scrollbar
+}
+
+.draggable-item {
+  background-color: $secondary;
+  width: 7rem;
+  cursor: grab;
+  margin: 8px;
+  padding: 10px;
+  color: $white;
+  border: 1px solid $secondary;
+  border-radius: 1rem;
 }
 
 .dragged-image {
-    width: 100px;
+  width: 100px;
 }
 
 .item-list::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  .item-list::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 3px;
-  }
+  width: 6px;
+}
+
+.item-list::-webkit-scrollbar-thumb {
+  background-color: $secondary;
+  border-radius: 3px;
+}

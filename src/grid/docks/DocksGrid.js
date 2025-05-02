@@ -375,7 +375,7 @@ const BarnsGrid = () => {
           setLayoutKeyUf(prev => prev + 1);
         }
       }
-      if (event.key.toLowerCase() === 'd') {
+      if (event.key === 'Delete' || event.key === 'Backspace' || event.key.toLowerCase() === 'd') {
         if (floorRef.current === 0) {
           setLayout(prev => prev.filter(item => item.i !== activeItemKey));
           setLayoutKey(prev => prev + 1); 

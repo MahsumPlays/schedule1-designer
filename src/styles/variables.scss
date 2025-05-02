@@ -1,0 +1,61 @@
+@import '../fonts.scss';
+
+$primary: #151411;      // kräftiges Blattgrün (Buttons, Highlights)
+$secondary: #292928;    // helleres Grün (Hover, sekundäre Elemente)
+$tertiary: #5a5a5a;       // sehr hell, zartgrün (Panels, Hintergrundflächen)
+$orange-accent: #F0BB78;
+$green-dark: #2e6446;
+$header-background: #151411; // Hintergrundfarbe für Header
+$header-background-highlight: #c4c3c2; // Hintergrundfarbe für Header
+
+// Neutrale Farben
+$white: #ffffff;
+$gray-light: #f1f4f2;         // Hintergrund, Panels
+$gray-medium: #c0cfc6;        // Border, Icons
+$gray-dark: #4b584f;          // Textfarbe (dunkel, leserlich)
+$black: #212822;
+
+// Weitere Akzente
+$warning: #ffc107;            // optional für Warnungen
+$error: #e57373;              // für Fehler oder ungültige Eingaben
+
+// Schatten / UI-Effekte
+$shadow: rgba(0, 0, 0, 0.1);
+
+@import 'node_modules/bootstrap/scss/bootstrap';
+
+.btn-primary {
+    @include button-variant(
+      $primary,          // Hintergrund
+      $white,            // Textfarbe
+      $white,          // Border
+      lighten($primary, 5%), // Hover
+      $white,
+      $white // Active
+    );
+  }
+
+.btn-secondary {
+    @include button-variant(
+      $secondary,          // Hintergrund
+      $secondary,             // Textfarbe
+      $white,          // Border
+      darken($secondary, 5%), // Hover
+      $white,
+      darken($secondary, 10%) // Active
+    );
+  }
+
+  .btn-tertiary {
+    @include button-variant(
+      $tertiary,            // Hintergrund
+      $tertiary,               // Text
+      $white,            // Border
+      darken($tertiary, 5%), // Hover-Hintergrund
+      $white,               // Hover-Text
+      darken($tertiary, 10%) // Active-Hintergrund
+    );
+    font-family: Akkurat Pro, sans-serif !important;
+  }
+  
+  
