@@ -2,11 +2,12 @@ import React, { useState, useRef } from 'react';
 import GridLayout from 'react-grid-layout';
 import { handleDragStop, useFurnitureDrop, useKeyboardShortcuts } from '../../services/GridService';
 import '../CustomGrid.scss';
-import './SweatshopGrid.scss';
+import './StorageGrid.scss';
+import '../../styles/variables.scss';
 
-const SweatshopGrid = () => {
-  const cols = 12;
-  const rows = 18;
+const StorageGrid = () => {
+  const cols = 10;
+  const rows = 19;
   const cellSize = 30;
   const gridWidth = cols * cellSize;
   const gridHeight = rows * cellSize;
@@ -18,74 +19,30 @@ const SweatshopGrid = () => {
 
 
   const blockedCells = [
-    { x: 0, y: 10 },
-    { x: 0, y: 11 },
-    { x: 0, y: 12 },
-    { x: 0, y: 13 },
-    { x: 0, y: 14 },
-    { x: 0, y: 15 },
-    { x: 0, y: 16 },
-    { x: 0, y: 17 },
-    { x: 1, y: 10 },
-    { x: 1, y: 11 },
-    { x: 1, y: 12 },
-    { x: 1, y: 13 },
-    { x: 1, y: 14 },
-    { x: 1, y: 15 },
-    { x: 1, y: 16 },
-    { x: 1, y: 17 },
-    { x: 2, y: 10 },
-    { x: 2, y: 11 },
-    { x: 2, y: 12 },
-    { x: 2, y: 13 },
-    { x: 2, y: 14 },
-    { x: 2, y: 15 },
-    { x: 2, y: 16 },
-    { x: 2, y: 17 },
-    { x: 3, y: 10 },
-    { x: 3, y: 11 },
-    { x: 3, y: 12 },
-    { x: 3, y: 13 },
-    { x: 3, y: 14 },
-    { x: 3, y: 15 },
-    { x: 3, y: 16 },
-    { x: 3, y: 17 },
-    { x: 4, y: 10 },
-    { x: 4, y: 11 },
-    { x: 4, y: 12 },
-    { x: 4, y: 13 },
-    { x: 4, y: 14 },
-    { x: 4, y: 15 },
-    { x: 4, y: 16 },
-    { x: 4, y: 17 },
-    { x: 5, y: 10 },
-    { x: 5, y: 11 },
-    { x: 5, y: 12 },
-    { x: 5, y: 13 },
-    { x: 5, y: 14 },
-    { x: 5, y: 15 },
-    { x: 5, y: 16 },
-    { x: 5, y: 17 },
-
+    { x: 0, y: 0 },
+    { x: 0, y: 1 },
+    { x: 0, y: 2 },
+    { x: 0, y: 3 },
+    { x: 0, y: 4 },
+    { x: 0, y: 5 },
+    { x: 0, y: 6 },
   ];
 
   const door = [
-    { x: 11, y: 0 }, 
-    { x: 11, y: 1 }, 
-    { x: 11, y: 2 }, 
-    { x: 10, y: 0 }, 
-    { x: 10, y: 1 }, 
-    { x: 10, y: 2 }, 
+    { x: 2, y: 0 }, 
+    { x: 3, y: 0 }, 
+  ]
+
+  const blocked = [
+    { x: 1, y: 0 }, 
+    { x: 4, y: 0 }, 
   ]
 
   const sink = [
-    { x: 11, y: 10 }, 
-    { x: 11, y: 11}, 
-    { x: 10, y: 10 }, 
-    { x: 10, y: 11 }, 
+    { x: 1, y: 1 },
   ]
 
-  const totalBlockedCells = [...blockedCells, ...door, ...sink];
+  const totalBlockedCells = [...blockedCells, ...door, ...sink, ...blocked];
 
   const [{ isOver }, drop] = useFurnitureDrop({
     cellSize,
@@ -130,7 +87,7 @@ const SweatshopGrid = () => {
         ref={drop}
         style={{ width: gridWidth, height: gridHeight, background: isOver ? '#f0f0f0' : undefined }}
       >
-        <div className="rgl-bg-sweatshop" />
+        <div className="rgl-bg-storage" />
         {blockedCells.map((cell, idx) => {
           return (
               <div
@@ -147,6 +104,30 @@ const SweatshopGrid = () => {
               />
             );
         })}
+        {blocked.map((cell, idx) => {
+          return (
+            <div
+              className="door-area"
+              style={{
+                position: 'absolute',
+                left: Math.min(...blocked.map(cell => cell.x)) * cellSize,
+                top: Math.min(...blocked.map(cell => cell.y)) * cellSize,
+                width: (Math.max(...blocked.map(cell => cell.x)) - Math.min(...blocked.map(cell => cell.x)) + 1) * cellSize,
+                height: (Math.max(...blocked.map(cell => cell.y)) - Math.min(...blocked.map(cell => cell.y)) + 1) * cellSize,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 'bold',
+                fontSize: '16px',
+                backgroundColor: '#000',
+                color: 'black',
+                boxSizing: 'border-box',
+              }}
+            >
+              DOOR
+            </div>
+            );
+        })}
         {door.map((cell, idx) => {
           return (
             <div
@@ -160,8 +141,6 @@ const SweatshopGrid = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                writingMode: 'vertical-rl',
-                textOrientation: 'upright',
                 fontWeight: 'bold',
                 fontSize: '16px',
                 color: 'black',
@@ -185,13 +164,15 @@ const SweatshopGrid = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                writingMode: 'vertical-rl',
+                textOrientation: 'upright',
                 fontWeight: 'bold',
                 fontSize: '18px',
+                backgroundColor: 'rgba(0, 119, 255, 0.8)',
                 color: 'black',
                 boxSizing: 'border-box',
               }}
-            >
-              SINK
+            > S
             </div>
             );
         })}
@@ -285,4 +266,4 @@ const SweatshopGrid = () => {
   );
 }
 
-export default SweatshopGrid;
+export default StorageGrid;

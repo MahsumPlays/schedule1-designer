@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { useDrop } from 'react-dnd';
 import GridLayout from 'react-grid-layout';
+import { handleDragStop, useFurnitureDrop, useKeyboardShortcuts } from '../../services/GridService';
 import '../CustomGrid.scss';
 import './MotelGrid.scss';
 
@@ -53,124 +53,21 @@ const BarnsGrid = () => {
 
   ];
 
-  const isOverlapping = (x, y, w, h) => {
-    let blocked = [];
-    blocked = [...blockedCells, ...door, ...sink];
-  
-    return blocked.some(cell =>
-      cell.x >= x && cell.x < x + w &&
-      cell.y >= y && cell.y < y + h
-    );
-  };
-  
+  const totalBlockedCells = [...blockedCells, ...door, ...sink];
 
-  const findNearestValidPosition = (w, h, startX, startY) => {
-    const maxDistance = Math.max(cols, rows);
-    for (let d = 1; d < maxDistance; d++) {
-      const directions = [
-        { x: startX + d, y: startY },
-        { x: startX - d, y: startY },
-        { x: startX, y: startY + d },
-        { x: startX, y: startY - d },
-      ];
+  const [{ isOver }, drop] = useFurnitureDrop({
+    cellSize,
+    totalBlockedCells,
+    setLayout,
+    setLayoutUf: null,
+    floorRef: null
+  });
 
-      for (const pos of directions) {
-        if (
-          pos.x >= 0 && pos.y >= 0 &&
-          pos.x + w <= cols && pos.y + h <= rows &&
-          !isOverlapping(pos.x, pos.y, w, h)
-        ) {
-          return pos;
-        }
-      }
-    }
-    return { x: startX, y: startY };
-  };
-
-  const handleDragStop = (layoutItems, oldItem, newItem) => {
-    const overlaps = isOverlapping(newItem.x, newItem.y, newItem.w, newItem.h);
-
-    if (overlaps) {
-      const newPos = findNearestValidPosition(newItem.w, newItem.h, newItem.x, newItem.y);
-        setLayout(prev =>
-          prev.map(item => item.i === newItem.i
-            ? { ...item, x: newPos.x, y: newPos.y }
-            : item
-          )
-        );
-        setLayoutKey(prev => prev + 1);
-    } else {
-        setLayout(prevLayout =>
-          prevLayout.map(item => {
-            const updatedItem = layoutItems.find(i => i.i === item.i);
-            return updatedItem ? { ...item, ...updatedItem } : item;
-          })
-        );
-    }
-  };
-
-  const [{ isOver }, drop] = useDrop(() => ({
-    accept: 'furniture',
-    drop: (item, monitor) => {
-      const offset = monitor.getClientOffset();
-      const gridRect = document.querySelector('.grid-container')?.getBoundingClientRect();
-      if (!offset || !gridRect) return;
-
-      const relativeX = offset.x - gridRect.left;
-      const relativeY = offset.y - gridRect.top;
-
-      const x = Math.floor(relativeX / cellSize);
-      const y = Math.floor(relativeY / cellSize);
-
-      if (!isOverlapping(x, y, item.w, item.h)) {
-        const newItem = {
-          i: `${item.type}-${Date.now()}`,
-          x,
-          y,
-          w: item.w,
-          h: item.h,
-          type: item.type,
-          image: item.image,
-          rotation: 0,
-        };
-        setLayout(prev => [...prev, newItem]);
-
-      }
-    },
-    collect: monitor => ({
-      isOver: !!monitor.isOver(),
-    }),
-  }));
-
-  React.useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key.toLowerCase() === 'r') {
-          setLayout(prev =>
-            prev.map(item =>
-              item.i === activeItemKey
-                ? {
-                    ...item,
-                    rotation: (item.rotation || 0) + 90 >= 360 ? 0 : (item.rotation || 0) + 90,
-                    w: item.h,
-                    h: item.w
-                  }
-                : item
-            )
-          );
-          setLayoutKey(prev => prev + 1);
-      }
-      if (event.key === 'Delete' || event.key === 'Backspace' || event.key.toLowerCase() === 'd') {
-        setLayout(prev => prev.filter(item => item.i !== activeItemKey));
-          setLayoutKey(prev => prev + 1); 
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [activeItemKey]);
-
+  useKeyboardShortcuts({
+    activeItemKey,
+    setLayout,
+    setLayoutKey,
+  });
   
   const getCellBordersFree = (x, y) => {
     const isBlocked = (x, y) => freeCells.some(cell => cell.x === x && cell.y === y);
@@ -220,7 +117,7 @@ const BarnsGrid = () => {
         {door.map((cell, idx) => {
           return (
             <div
-              className="door-area"
+              className="door-area-blocked"
               style={{
                 position: 'absolute',
                 left: Math.min(...door.map(cell => cell.x)) * cellSize,
@@ -234,7 +131,6 @@ const BarnsGrid = () => {
                 textOrientation: 'upright',
                 fontWeight: 'bold',
                 fontSize: '20px',
-                backgroundColor: 'rgba(200, 200, 200, 0.7)',
                 color: 'black',
                 boxSizing: 'border-box',
               }}
@@ -246,7 +142,7 @@ const BarnsGrid = () => {
         {sink.map((cell, idx) => {
           return (
             <div
-              className="door-area"
+              className="sink-area-blocked"
               style={{
                 position: 'absolute',
                 left: Math.min(...sink.map(cell => cell.x)) * cellSize,
@@ -258,7 +154,6 @@ const BarnsGrid = () => {
                 justifyContent: 'center',
                 fontWeight: 'bold',
                 fontSize: '20px',
-                backgroundColor: 'rgba(200, 200, 200, 0.7)',
                 color: 'black',
                 boxSizing: 'border-box',
               }}
@@ -308,7 +203,17 @@ const BarnsGrid = () => {
           }}
           onDragStop={(layoutItems, oldItem, newItem) => {
             isDragging.current = false;
-            handleDragStop(layoutItems, oldItem, newItem);
+              handleDragStop({
+                layoutItems: layoutItems,
+                oldItem: oldItem,
+                newItem: newItem,
+                blockedCells: totalBlockedCells,
+                cols: cols,
+                rows: rows,
+                setLayout: setLayout,
+                setLayoutKey: setLayoutKey,
+                floor: 0,
+              });
           }}
         >
           {layout.map(item => (

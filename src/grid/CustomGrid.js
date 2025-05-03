@@ -4,6 +4,7 @@ import MotelGrid from './motel/MotelGrid';
 import BungalowGrid from './bungalow/BungalowGrid';
 import SweatshopGrid from './sweatshop/SweatshopGrid';
 import DocksGrid from './docks/DocksGrid';
+import StorageGrid from './storage/StorageGrid';
 import './CustomGrid.scss';
 
 const CustomGrid = ({ selectedBuilding }) => {
@@ -20,6 +21,8 @@ const CustomGrid = ({ selectedBuilding }) => {
         return <SweatshopGrid />;
       case 'Docks':
         return <DocksGrid />;
+      case 'Storage':
+        return <StorageGrid />;
       default:
         return <div>Select a Grid</div>;
     }

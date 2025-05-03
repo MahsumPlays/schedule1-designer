@@ -11,6 +11,7 @@ const PlanerHeader = ({ onSelectBuilding }) => {
         <button className='header-button' onClick={() => onSelectBuilding('Bungalow')}>Bungalow</button>
         <button className='header-button' onClick={() => onSelectBuilding('Barn')}>Barn</button>
         <button className='header-button' onClick={() => onSelectBuilding('Docks')}>Docks</button>
+        <button className='header-button' onClick={() => onSelectBuilding('Storage')}>Storage</button>
       </div>
     </header>
   );

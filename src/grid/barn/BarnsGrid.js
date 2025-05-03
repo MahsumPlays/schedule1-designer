@@ -3,6 +3,7 @@ import { useDrop } from 'react-dnd';
 import GridLayout from 'react-grid-layout';
 import Button from 'react-bootstrap/Button';
 import '../CustomGrid.scss';
+import { handleDragStop, useFurnitureDrop, useKeyboardShortcuts } from '../../services/GridService';
 
 const BarnsGrid = () => {
   const cols = 37;
@@ -90,175 +91,13 @@ const BarnsGrid = () => {
     { x: 17, y: 7 }, { x: 17, y: 8 }, { x: 17, y: 9 }, { x: 17, y: 10 },
 ]
 
+const totalBlockedCells = [...blockedCells, ...stairs, ...door];
+
+const totalBlockedCellsUf = [...blockedCellsUf, ...stairsUf];
+
   useEffect(() => {
     floorRef.current = floor;
   }, [floor]);
-
-  const isOverlapping = (x, y, w, h) => {
-    let blocked = [];
-    if (floorRef.current === 0) {
-      blocked = [...blockedCells, ...stairs];
-    } else if (floorRef.current === 1) {
-      blocked = [...blockedCellsUf, ...stairsUf];
-    }
-  
-    return blocked.some(cell =>
-      cell.x >= x && cell.x < x + w &&
-      cell.y >= y && cell.y < y + h
-    );
-  };
-  
-
-  const findNearestValidPosition = (w, h, startX, startY) => {
-    const maxDistance = Math.max(cols, rows);
-    for (let d = 1; d < maxDistance; d++) {
-      const directions = [
-        { x: startX + d, y: startY },
-        { x: startX - d, y: startY },
-        { x: startX, y: startY + d },
-        { x: startX, y: startY - d },
-      ];
-
-      for (const pos of directions) {
-        if (
-          pos.x >= 0 && pos.y >= 0 &&
-          pos.x + w <= cols && pos.y + h <= rows &&
-          !isOverlapping(pos.x, pos.y, w, h)
-        ) {
-          return pos;
-        }
-      }
-    }
-    return { x: startX, y: startY };
-  };
-
-  const handleDragStop = (layoutItems, oldItem, newItem) => {
-    const overlaps = isOverlapping(newItem.x, newItem.y, newItem.w, newItem.h);
-
-    if (overlaps) {
-      const newPos = findNearestValidPosition(newItem.w, newItem.h, newItem.x, newItem.y);
-      if (floor === 0) {
-        setLayout(prev =>
-          prev.map(item => item.i === newItem.i
-            ? { ...item, x: newPos.x, y: newPos.y }
-            : item
-          )
-        );
-        setLayoutKey(prev => prev + 1);
-      } else if (floor === 1) {
-        setLayoutUf(prev =>
-          prev.map(item => item.i === newItem.i
-            ? { ...item, x: newPos.x, y: newPos.y }
-            : item
-          )
-        );
-        setLayoutKeyUf(prev => prev + 1);
-      }
-    } else {
-      if (floorRef.current === 0) {
-        setLayout(prevLayout =>
-          prevLayout.map(item => {
-            const updatedItem = layoutItems.find(i => i.i === item.i);
-            return updatedItem ? { ...item, ...updatedItem } : item;
-          })
-        );
-      } else if (floorRef.current === 1) {
-        setLayoutUf(prevLayout =>
-          prevLayout.map(item => {
-            const updatedItem = layoutItems.find(i => i.i === item.i);
-            return updatedItem ? { ...item, ...updatedItem } : item;
-          })
-        );
-      }
-
-    }
-  };
-
-  const [{ isOver }, drop] = useDrop(() => ({
-    accept: 'furniture',
-    drop: (item, monitor) => {
-      const offset = monitor.getClientOffset();
-      const gridRect = document.querySelector('.grid-container')?.getBoundingClientRect();
-      if (!offset || !gridRect) return;
-
-      const relativeX = offset.x - gridRect.left;
-      const relativeY = offset.y - gridRect.top;
-
-      const x = Math.floor(relativeX / cellSize);
-      const y = Math.floor(relativeY / cellSize);
-
-      if (!isOverlapping(x, y, item.w, item.h)) {
-        const newItem = {
-          i: `${item.type}-${Date.now()}`,
-          x,
-          y,
-          w: item.w,
-          h: item.h,
-          type: item.type,
-          image: item.image,
-          rotation: 0,
-        };
-        if (floorRef.current === 0) {
-          setLayout(prev => [...prev, newItem]);
-        } else {
-          setLayoutUf(prev => [...prev, newItem]);
-        }
-      }
-    },
-    collect: monitor => ({
-      isOver: !!monitor.isOver(),
-    }),
-  }));
-
-  React.useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key.toLowerCase() === 'r') {
-        if (floorRef.current === 0) {
-          setLayout(prev =>
-            prev.map(item =>
-              item.i === activeItemKey
-                ? {
-                    ...item,
-                    rotation: (item.rotation || 0) + 90 >= 360 ? 0 : (item.rotation || 0) + 90,
-                    w: item.h,
-                    h: item.w
-                  }
-                : item
-            )
-          );
-          setLayoutKey(prev => prev + 1);
-        } else {
-          setLayoutUf(prev =>
-            prev.map(item =>
-              item.i === activeItemKey
-                ? {
-                    ...item,
-                    rotation: (item.rotation || 0) + 90 >= 360 ? 0 : (item.rotation || 0) + 90,
-                    w: item.h,
-                    h: item.w
-                  }
-                : item
-            )
-          );
-          setLayoutKeyUf(prev => prev + 1);
-        }
-      }
-      if (event.key === 'Delete' || event.key === 'Backspace' || event.key.toLowerCase() === 'd') {
-        if (floorRef.current === 0) {
-          setLayout(prev => prev.filter(item => item.i !== activeItemKey));
-          setLayoutKey(prev => prev + 1); 
-        } else {
-          setLayoutUf(prev => prev.filter(item => item.i !== activeItemKey));
-          setLayoutKeyUf(prev => prev + 1); 
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [activeItemKey]);
 
   const handleButtonSwitchFloor = () => {
     if (floor === 0) {
@@ -270,6 +109,20 @@ const BarnsGrid = () => {
     }
   }
 
+  const [{ isOver }, drop] = useFurnitureDrop({
+    cellSize: cellSize,
+    totalBlockedCells: totalBlockedCells,
+    setLayout: setLayout,
+    setLayoutUf: setLayoutUf,
+    floorRef: floorRef,
+  });
+
+  useKeyboardShortcuts({
+    activeItemKey: activeItemKey,
+    setLayout: floor === 0 ? setLayout : setLayoutUf,
+    setLayoutKey: floor === 0 ? setLayoutKey : setLayoutKeyUf,
+  });
+
 
   const getCellBordersFree = (x, y) => {
     const isBlocked = (x, y) => freeCells.some(cell => cell.x === x && cell.y === y);
@@ -280,7 +133,6 @@ const BarnsGrid = () => {
       borderRight: !isBlocked(x + 1, y) ? '3px solid black' : '',
     };
   };
-  //commit test
 
   const getCellBordersEG = (x, y) => {
     const isBlocked = (x, y) => freeCellsEg.some(cell => cell.x === x && cell.y === y);
@@ -425,10 +277,21 @@ const BarnsGrid = () => {
           onDragStart={(layout, oldItem, newItem, placeholder, event, element) => {
             isDragging.current = true;
             setActiveItemKey(newItem.i);
+            console.log("active item",newItem.i)
           }}
           onDragStop={(layoutItems, oldItem, newItem) => {
             isDragging.current = false;
-            handleDragStop(layoutItems, oldItem, newItem);
+              handleDragStop({
+                layoutItems: layoutItems,
+                oldItem: oldItem,
+                newItem: newItem,
+                blockedCells: totalBlockedCells,
+                cols: cols,
+                rows: rows,
+                setLayout: setLayout,
+                setLayoutKey: setLayoutKey,
+                floor: 0,
+              });
           }}
         >
           {layout.map(item => (
@@ -444,7 +307,7 @@ const BarnsGrid = () => {
               alignItems: 'center',
               transform: `rotate(${item.rotation || 0}deg)`,
             }}
-            onClick={() => setActiveItemKey(item.i)}
+            onClick={() => {setActiveItemKey(item.i); console.log("active item",item.i)}}
           >
             <img
               src={item.image}
@@ -540,10 +403,21 @@ const BarnsGrid = () => {
           onDragStart={(layout, oldItem, newItem, placeholder, event, element) => {
             isDragging.current = true;
             setActiveItemKey(newItem.i);
+            console.log("active item",newItem.i)
           }}
           onDragStop={(layoutItems, oldItem, newItem) => {
             isDragging.current = false;
-            handleDragStop(layoutItems, oldItem, newItem);
+            handleDragStop({
+              layoutItems: layoutItems,
+              oldItem: oldItem,
+              newItem: newItem,
+              blockedCells: totalBlockedCellsUf,
+              cols: cols,
+              rows: rows,
+              setLayout: setLayoutUf,
+              setLayoutKey: setLayoutKeyUf,
+              floor: 1,
+            });          
           }}
         >
         {layoutUf.map(item => (
@@ -559,7 +433,7 @@ const BarnsGrid = () => {
               alignItems: 'center',
               transform: `rotate(${item.rotation || 0}deg)`,
             }}
-            onClick={() => setActiveItemKey(item.i)}
+            onClick={() => {setActiveItemKey(item.i); console.log("active item",item.i)}}
           >
             <img
               src={item.image}
