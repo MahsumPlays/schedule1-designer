@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useDrop } from 'react-dnd';
 import GridLayout from 'react-grid-layout';
 import Button from 'react-bootstrap/Button';
 import '../CustomGrid.scss';
