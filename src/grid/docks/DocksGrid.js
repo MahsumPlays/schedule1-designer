@@ -5,7 +5,7 @@ import '../CustomGrid.scss';
 import './DocksGrid.scss';
 import { handleDragStop, useFurnitureDrop, useKeyboardShortcuts } from '../../services/GridService';
 
-const BarnsGrid = () => {
+const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
   const cols = 40;
   const rows = 28;
   const colsUf = 28;
@@ -17,8 +17,6 @@ const BarnsGrid = () => {
   const gridHeightUf = rowsUf * cellSize;
 
   const [floor, setFloor] = useState(0);
-  const [layout, setLayout] = useState([]);
-  const [layoutUf, setLayoutUf] = useState([]);
   const [layoutKey, setLayoutKey] = useState(0);
   const [layoutKeyUf, setLayoutKeyUf] = useState(0);
   const [activeItemKey, setActiveItemKey] = useState(null);
@@ -241,6 +239,8 @@ const BarnsGrid = () => {
     activeItemKey: activeItemKey,
     setLayout: floor === 0 ? setLayout : setLayoutUf,
     setLayoutKey: floor === 0 ? setLayoutKey : setLayoutKeyUf,
+    cols: floor === 0 ? cols : colsUf,
+    rows: floor === 0 ? rows : rowsUf,
   });
 
 

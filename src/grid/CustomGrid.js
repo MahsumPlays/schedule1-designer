@@ -7,34 +7,34 @@ import DocksGrid from './docks/DocksGrid';
 import StorageGrid from './storage/StorageGrid';
 import './CustomGrid.scss';
 
-const CustomGrid = ({ selectedBuilding }) => {
+const CustomGrid = ({ selectedBuilding, layout, setLayout, layoutUf, setLayoutUf }) => {
 
   const renderSelectedGrid = () => {
+    const gridProps = { layout, setLayout, layoutUf, setLayoutUf }; 
     switch (selectedBuilding) {
       case 'Barn':
-        return <BarnsGrid />;
+        return <BarnsGrid {...gridProps} />;
       case 'Motel':
-        return <MotelGrid />;
+        return <MotelGrid {...gridProps} />;
       case 'Bungalow':
-        return <BungalowGrid />;
+        return <BungalowGrid {...gridProps} />;
       case 'Sweatshop':
-        return <SweatshopGrid />;
+        return <SweatshopGrid {...gridProps} />;
       case 'Docks':
-        return <DocksGrid />;
+        return <DocksGrid {...gridProps} />;
       case 'Storage':
-        return <StorageGrid />;
+        return <StorageGrid {...gridProps} />;
       default:
         return <div>Select a Grid</div>;
     }
   };
 
   return (
-    <div>
-      <div className="grid-content">
-        {renderSelectedGrid()}
-      </div>
+    <div className="grid-content">
+      {renderSelectedGrid()}
     </div>
   );
 };
+
 
 export default CustomGrid;

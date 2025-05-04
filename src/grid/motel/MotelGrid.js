@@ -4,14 +4,13 @@ import { handleDragStop, useFurnitureDrop, useKeyboardShortcuts } from '../../se
 import '../CustomGrid.scss';
 import './MotelGrid.scss';
 
-const BarnsGrid = () => {
+const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
   const cols = 12;
   const rows = 10;
   const cellSize = 40;
   const gridWidth = cols * cellSize;
   const gridHeight = rows * cellSize;
 
-  const [layout, setLayout] = useState([]);
   const [layoutKey, setLayoutKey] = useState(0);
   const isDragging = useRef(false);
   const [activeItemKey, setActiveItemKey] = useState(null);
@@ -67,6 +66,8 @@ const BarnsGrid = () => {
     activeItemKey,
     setLayout,
     setLayoutKey,
+    cols,
+    rows,
   });
   
   const getCellBordersFree = (x, y) => {
@@ -88,7 +89,6 @@ const BarnsGrid = () => {
       }
     }
   }
-
   
   return (
     <div className="custom-grid-container">
@@ -133,6 +133,7 @@ const BarnsGrid = () => {
                 fontSize: '20px',
                 color: 'black',
                 boxSizing: 'border-box',
+                userSelect: 'none',
               }}
             >
               DOOR
@@ -156,6 +157,7 @@ const BarnsGrid = () => {
                 fontSize: '20px',
                 color: 'black',
                 boxSizing: 'border-box',
+                userSelect: 'none',
               }}
             >
               SINK

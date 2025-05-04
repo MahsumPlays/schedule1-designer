@@ -5,14 +5,13 @@ import '../CustomGrid.scss';
 import './StorageGrid.scss';
 import '../../styles/variables.scss';
 
-const StorageGrid = () => {
+const StorageGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
   const cols = 10;
   const rows = 19;
   const cellSize = 30;
   const gridWidth = cols * cellSize;
   const gridHeight = rows * cellSize;
 
-  const [layout, setLayout] = useState([]);
   const [layoutKey, setLayoutKey] = useState(0);
   const isDragging = useRef(false);
   const [activeItemKey, setActiveItemKey] = useState(null);
@@ -56,6 +55,8 @@ const StorageGrid = () => {
     activeItemKey,
     setLayout,
     setLayoutKey,
+    cols,
+    rows,
   });
 
   
@@ -122,6 +123,7 @@ const StorageGrid = () => {
                 backgroundColor: '#000',
                 color: 'black',
                 boxSizing: 'border-box',
+                userSelect: 'none',
               }}
             >
               DOOR
@@ -145,6 +147,7 @@ const StorageGrid = () => {
                 fontSize: '16px',
                 color: 'black',
                 boxSizing: 'border-box',
+                userSelect: 'none',
               }}
             >
               DOOR
@@ -171,6 +174,7 @@ const StorageGrid = () => {
                 backgroundColor: 'rgba(0, 119, 255, 0.8)',
                 color: 'black',
                 boxSizing: 'border-box',
+                userSelect: 'none',
               }}
             > S
             </div>

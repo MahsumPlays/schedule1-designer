@@ -4,14 +4,13 @@ import { handleDragStop, useFurnitureDrop, useKeyboardShortcuts } from '../../se
 import '../CustomGrid.scss';
 import './SweatshopGrid.scss';
 
-const SweatshopGrid = () => {
+const SweatshopGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
   const cols = 12;
   const rows = 18;
   const cellSize = 30;
   const gridWidth = cols * cellSize;
   const gridHeight = rows * cellSize;
 
-  const [layout, setLayout] = useState([]);
   const [layoutKey, setLayoutKey] = useState(0);
   const isDragging = useRef(false);
   const [activeItemKey, setActiveItemKey] = useState(null);
@@ -99,6 +98,8 @@ const SweatshopGrid = () => {
     activeItemKey,
     setLayout,
     setLayoutKey,
+    cols,
+    rows,
   });
 
   
@@ -166,6 +167,7 @@ const SweatshopGrid = () => {
                 fontSize: '16px',
                 color: 'black',
                 boxSizing: 'border-box',
+                userSelect: 'none',
               }}
             >
               DOOR
@@ -189,6 +191,7 @@ const SweatshopGrid = () => {
                 fontSize: '18px',
                 color: 'black',
                 boxSizing: 'border-box',
+                userSelect: 'none',
               }}
             >
               SINK

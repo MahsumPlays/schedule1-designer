@@ -4,14 +4,13 @@ import '../CustomGrid.scss';
 import './BungalowGrid.scss';
 import { handleDragStop, useFurnitureDrop, useKeyboardShortcuts } from '../../services/GridService';
 
-const BungalowGrid = () => {
+const BungalowGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
   const cols = 24;
   const rows = 24;
   const cellSize = 25;
   const gridWidth = cols * cellSize;
   const gridHeight = rows * cellSize;
 
-  const [layout, setLayout] = useState([]);
   const [layoutKey, setLayoutKey] = useState(0);
   const isDragging = useRef(false);
   const [activeItemKey, setActiveItemKey] = useState(null);
@@ -259,6 +258,8 @@ const BungalowGrid = () => {
     activeItemKey,
     setLayout,
     setLayoutKey,
+    cols,
+    rows,
   });
   
   const getCellBordersFree = (x, y) => {

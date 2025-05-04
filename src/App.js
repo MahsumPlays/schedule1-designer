@@ -10,25 +10,34 @@ import ReactGA from 'react-ga4';
 
 function App() {
   const [selectedBuilding, setSelectedBuilding] = useState('Barn');
+  const [layout, setLayout] = useState([]);
+  const [layoutUf, setLayoutUf] = useState([]);
   const TRACKING_ID = "G-96L8929EGY";
   ReactGA.initialize(TRACKING_ID);
 
   useEffect(() => { ReactGA.send({ hitType: "pageview", page: window.location.pathname }); }, []);
 
+  const handleSelectBuilding = (newBuilding) => {
+    setSelectedBuilding(newBuilding);
+    setLayout([]);
+    setLayoutUf([]);
+  };
+
   return (
     <div className="App">
-      <PlanerHeader onSelectBuilding={setSelectedBuilding} />
+      <PlanerHeader onSelectBuilding={handleSelectBuilding} />
       <div className="app-content">
         <DndProvider backend={HTML5Backend}>
           <ItemPicker items={furnitureItems} />
-          <CustomGrid selectedBuilding={selectedBuilding} />
+          <CustomGrid selectedBuilding={selectedBuilding} layout={layout} setLayout={setLayout} layoutUf={layoutUf} setLayoutUf={setLayoutUf}/>
         </DndProvider>
         <div className='tutorial'>
-            <h2>Controls</h2>
+                      <h2>Controls</h2>
             <p>Click and drag to place items on the grid</p>
             <p>Press R to rotate last dragged item</p>
+            <p>Press D to duplicate last dragged item</p>
             <p>Press Delete to remove last dragged item</p>
-          </div>
+        </div>
       </div>
     </div>
   );

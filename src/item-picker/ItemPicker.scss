@@ -5,12 +5,11 @@
   flex-direction: column;
   align-items: center;
   width: fit-content;
-  padding-top: 10px;
+  height: 70vh;
 }
 
 .item-list-outer {
-  background-color: $tertiary;
-  border-radius: 1rem;
+  background-color: $primary;
   overflow: hidden; // wichtig: verhindert Überlauf der Scrollbar
   width: 100%; // passt zur Breite von .item-picker
 }
@@ -20,10 +19,9 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
   align-items: start;
-  max-height: 42rem;
+  max-height: 40rem;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 10px;
   padding-right: 6px; // optional: Platz für Scrollbar
 }
 
@@ -49,5 +47,5 @@
 
 .item-list::-webkit-scrollbar-thumb {
   background-color: $secondary;
-  border-radius: 3px;
+  z-index: 10;
 }
