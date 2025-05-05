@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import GridLayout from 'react-grid-layout';
-import Button from 'react-bootstrap/Button';
 import '../CustomGrid.scss';
 import './DocksGrid.scss';
 import { handleDragStop, useFurnitureDrop, useKeyboardShortcuts } from '../../services/GridService';
 
-const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
+const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf, floor }) => {
   const cols = 40;
   const rows = 28;
   const colsUf = 28;
@@ -16,7 +15,6 @@ const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
   const gridWidthUf = colsUf * cellSize;
   const gridHeightUf = rowsUf * cellSize;
 
-  const [floor, setFloor] = useState(0);
   const [layoutKey, setLayoutKey] = useState(0);
   const [layoutKeyUf, setLayoutKeyUf] = useState(0);
   const [activeItemKey, setActiveItemKey] = useState(null);
@@ -244,15 +242,13 @@ const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
   });
 
 
-  const handleButtonSwitchFloor = () => {
+  useEffect(() => {
     if (floor === 0) {
-      setFloor(1);
-      setLayoutKeyUf(prev => prev + 1);
-    } else {
-      setFloor(0);
       setLayoutKey(prev => prev + 1);
+    } else {
+      setLayoutKeyUf(prev => prev + 1);
     }
-  }
+  }, [floor]);
 
   const getCellBordersFree = (x, y) => {
     const isBlocked = (x, y) => freeCells.some(cell => cell.x === x && cell.y === y);
@@ -297,10 +293,6 @@ const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
 
   return (
     <div className="custom-grid-container">
-      <div className='grid-floor-switch' style={{ marginBottom: '10px' }}>
-        <Button type='button' size='lg' onClick={() => {handleButtonSwitchFloor()}}
-          className='btn btn-default'>Switch Floor</Button>
-      </div>
       {floor === 0 && (
       <div
         className="grid-container"

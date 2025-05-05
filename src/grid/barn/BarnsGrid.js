@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import GridLayout from 'react-grid-layout';
-import Button from 'react-bootstrap/Button';
 import '../CustomGrid.scss';
 import { handleDragStop, useFurnitureDrop, useKeyboardShortcuts } from '../../services/GridService';
 
-const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
+const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf, floor }) => {
   const cols = 37;
   const rows = 30;
   const colsUf = 18;
@@ -15,7 +14,6 @@ const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
   const gridWidthUf = colsUf * cellSize;
   const gridHeightUf = rowsUf * cellSize;
 
-  const [floor, setFloor] = useState(0);
   const [layoutKey, setLayoutKey] = useState(0);
   const [layoutKeyUf, setLayoutKeyUf] = useState(0);
   const [activeItemKey, setActiveItemKey] = useState(null);
@@ -96,15 +94,13 @@ const totalBlockedCellsUf = [...blockedCellsUf, ...stairsUf];
     floorRef.current = floor;
   }, [floor]);
 
-  const handleButtonSwitchFloor = () => {
+  useEffect(() => {
     if (floor === 0) {
-      setFloor(1);
-      setLayoutKeyUf(prev => prev + 1);
-    } else {
-      setFloor(0);
       setLayoutKey(prev => prev + 1);
+    } else {
+      setLayoutKeyUf(prev => prev + 1);
     }
-  }
+  }, [floor]);
 
   const [{ isOver }, drop] = useFurnitureDrop({
     cellSize: cellSize,
@@ -161,10 +157,6 @@ const totalBlockedCellsUf = [...blockedCellsUf, ...stairsUf];
 
   return (
     <div className="custom-grid-container">
-      <div className='grid-floor-switch' style={{ marginBottom: '10px' }}>
-        <Button type='button' size='lg' onClick={() => {handleButtonSwitchFloor()}}
-          className='btn btn-primary'>Switch Floor</Button>
-      </div>
       {floor === 0 && (
       <div
         className="grid-container"
