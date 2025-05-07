@@ -216,6 +216,7 @@ const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
                 setLayoutKey: setLayoutKey,
                 floor: 0,
               });
+              console.log(layout)
           }}
         >
           {layout.map(item => (

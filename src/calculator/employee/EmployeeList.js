@@ -11,14 +11,15 @@ const EmployeeList = ({ layout }) => {
         const count = layout.filter(item => botanistItems.includes(item.name)).length;
         return (count === 0 ? 0 : Math.ceil(count / 8));
       };
-    const botanistDailyPrice = () => {
-        return (botanistAmount() === 0 ? " " : (botanistAmount() * 200));
+      const botanistDailyPrice = () => {
+        return botanistAmount() === 0 ? 0 : (botanistAmount() * 200);
     };
     const botanistPrice = () => {
-        return (botanistAmount() === 0 ? " " : (botanistAmount() * 1500));
+        return (botanistAmount() === 0 ? 0 : (botanistAmount() * 1500));
     };
 
     const formatPrice = (price) => {
+        console.log(price.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }));
         return price.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
     };
 
@@ -26,22 +27,24 @@ const EmployeeList = ({ layout }) => {
         const count = layout.filter(item => chemistItems.includes(item.name)).length;
         return (count === 0 ? 0 : Math.ceil(count / 4));
       };
-    const chemistDailyPrice = () => {
-        return (chemistAmount() === 0 ? " " : (chemistAmount() * 300));
+      const chemistDailyPrice = () => {
+        return chemistAmount() === 0 ? 0 : (chemistAmount() * 200);
     };
+    
     const chemistPrice = () => {
-        return (chemistAmount() === 0 ? " " : (chemistAmount() * 3000));
+        return (chemistAmount() === 0 ? 0 : (chemistAmount() * 2000));
     };
 
     const cleanerAmount = () => {
         const count = layout.filter(item => cleanerItems.includes(item.name)).length;
         return (count === 0 ? 0 : Math.ceil(count / 3));
       };
-    const cleanerDailyPrice = () => {
-        return (cleanerAmount() === 0 ? " " : (cleanerAmount() * 100));
+      const cleanerDailyPrice = () => {
+        return cleanerAmount() === 0 ? 0 : (cleanerAmount() * 200);
     };
+    
     const cleanerPrice = () => {
-        return (cleanerAmount() === 0 ? " " : (cleanerAmount() * 1000));
+        return (cleanerAmount() ===  0 ? 0 :(cleanerAmount() * 1000));
     };
 
     const totalDailyPrice = () => {

@@ -8,6 +8,8 @@ import StorageGrid from './storage/StorageGrid';
 import './CustomGrid.scss';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs, Timestamp } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const CustomGrid = ({ selectedBuilding, layout, setLayout, layoutUf, setLayoutUf }) => {
   const [floor, setFloor] = useState(0);
@@ -36,6 +38,61 @@ const CustomGrid = ({ selectedBuilding, layout, setLayout, layoutUf, setLayoutUf
   const handleButtonSwitchFloor = () => {
     setFloor((prevFloor) => (prevFloor === 0 ? 1 : 0));
   };
+  
+  const handleLayoutUpload = async () => {
+    const db = getFirestore();
+    const auth = getAuth();
+    const user = auth.currentUser;
+  
+    if (!user) {
+      alert("You must be logged in.");
+      return;
+    }
+  
+    // Calculate timestamp for 7 days ago
+    const oneWeekAgo = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
+  
+    // Find all uploads by the user in the last 7 days
+    const q = query(
+      collection(db, "designs"),
+      where("userId", "==", user.uid),
+      where("createdAt", ">=", oneWeekAgo)
+    );
+  
+    const snapshot = await getDocs(q);
+  
+    if (snapshot.size >= 10) {
+      alert("You have reached the upload limit of 10 designs per week.");
+      return;
+    }
+  
+    // Allow upload
+    try {
+      const cleanLayout = layout.map(({ x, y, type, rotation }) => ({ x, y, type, rotation }));
+      const cleanLayoutUf = layoutUf.length > 0
+        ? layoutUf.map(({ x, y, type, rotation }) => ({ x, y, type, rotation }))
+        : null;
+  
+      // Add selectedBuilding to the upload
+      await addDoc(collection(db, "designs"), {
+        userId: user.uid,
+        username: user.displayName,
+        layout: cleanLayout,
+        layoutUf: cleanLayoutUf,
+        property: selectedBuilding, 
+        likes: 0,
+        createdAt: serverTimestamp()
+      });
+  
+      alert("Design uploaded successfully!");
+    } catch (error) {
+      console.error("Error during upload:", error);
+      alert("Error during upload. Please try again.");
+    }
+  };
+  
+  
+  
 
   return (
     <div className="grid-content">
@@ -58,6 +115,15 @@ const CustomGrid = ({ selectedBuilding, layout, setLayout, layoutUf, setLayoutUf
             style={{ marginLeft: '10px' }}
           >
             Controls
+          </Button>
+          <Button
+            type='button'
+            size='lg'
+            onClick={() => handleLayoutUpload()}
+            className='btn btn-default'
+            style={{ marginLeft: '10px' }}
+          >
+            Upload Design
           </Button>
       </div>
       {renderSelectedGrid()}
