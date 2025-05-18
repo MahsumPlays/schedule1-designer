@@ -73,7 +73,7 @@ const CustomGrid = ({ selectedBuilding, layout, setLayout, layoutUf, setLayoutUf
       return;
     }
 
-    if (!/^[a-zA-Z0-9 _\-]{3,50}$/.test(designTitle.trim())) {
+    if (!/^[a-zA-Z0-9 _]{3,50}$/.test(designTitle.trim())) {
       alert("Title must be 3–50 characters and only contain letters, numbers, spaces, - or _.");
       return;
     }

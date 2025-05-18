@@ -166,10 +166,12 @@ const PlanerHeader = ({ onSelectBuilding }) => {
             />
             {showDropdown && (
               <div className="dropdown-menu">
-                <button onClick={() => {{
-                  setIsEditingUsername(true)}; 
+                <button onClick={() => {
+                  setIsEditingUsername(true); 
                   setShowControlsDialog(true);
-                  }}>Change Username</button>
+                }}>
+                  Change Username
+                </button>
                 <button onClick={handleLogout}>Logout</button>
               </div>
             )}

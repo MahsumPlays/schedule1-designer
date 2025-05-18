@@ -31,8 +31,6 @@ const DesignView = ({ layout: initialLayout, layoutUf: initialLayoutUf, property
   useEffect(() => {
     const fetchDesign = async () => {
       const db = getFirestore();
-      const auth = getAuth();
-      const user = auth.currentUser;
 
       if (!id) return;
       const docRef = doc(db, 'designs', id);

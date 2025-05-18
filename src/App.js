@@ -10,7 +10,7 @@ import ReactGA from 'react-ga4';
 import Calculator from './calculator/Calculator';
 import RankingOverview from './ranking/RankingOverview';
 import Footer from './footer/Footer';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import DesignView from './ranking/DesignView';
 
 function App() {
