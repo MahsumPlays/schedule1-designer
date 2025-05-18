@@ -46,9 +46,12 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: flex-start;
-  margin-left: 5rem;
-  margin-top: 3rem;
+  margin-top: 1rem;
   gap: 2rem; 
+}
+
+.first-view {
+    min-height: 100vh;
 }
 
 .tutorial {

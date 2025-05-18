@@ -6,7 +6,7 @@
     color: $primary;
     padding: 5px;
     text-align: center;
-    height: 10%;
+    height: 6rem;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
@@ -17,6 +17,8 @@
     align-items: start;
     margin-left: 1.5rem;
     font-weight: 800;
+    user-select: none;
+    cursor: pointer;
 }
 
 .header-buttons-container {
@@ -56,5 +58,121 @@
     &:hover::after {
       transform: scaleX(1);         // Linie fährt aus
     }
+  }
+  
+  .login-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto;
+    margin-right: 4rem;
+    padding-left: 1rem;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .username {
+    margin-right: 1rem;
+    font-size: 18px;
+  }
+
+  .user-menu {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .user-avatar:hover {
+    transform: scale(1.05);
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 42px;
+    right: 0;
+    background-color: #1e1e1e;
+    color: white;
+    border: 1px solid #333;
+    padding: 8px;
+    border-radius: 8px;
+    z-index: 9999; /* Höherer Wert für das Dropdown */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    display: none; /* Sicherstellen, dass es nicht standardmäßig angezeigt wird */
+  }
+  
+  .user-menu.open .dropdown-menu {
+    background-color: $secondary;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;  
+  }
+  
+  
+  .dropdown-menu button {
+    background: none;
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .dropdown-menu button:hover {
+    background-color: #333;
+  }
+  
+  .username-dialog {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 8px;
+  }
+  .username-dialog input {
+    padding: 4px;
+  }
+  .username-dialog button {
+    padding: 4px;
+    font-size: 0.9rem;
+  }
+  
+  .properties-dropdown-container {
+    position: relative;
+  }
+  
+  .properties-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 8rem;
+    background: $primary;
+    border: 1px solid $secondary;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .properties-dropdown button {
+    padding: 5px 10px;
+    border: none;
+    background: $secondary;
+    color: $white;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+  }
+  
+  .properties-dropdown button:hover {
+    background: $tertiary;
   }
   

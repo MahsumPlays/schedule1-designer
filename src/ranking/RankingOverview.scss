@@ -1,0 +1,58 @@
+.ranking-overview-container {
+    color: white;
+}
+
+.ranking-overview-header {
+    margin-bottom: 3rem;
+}
+
+.ranking-overview-content {
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+    grid: auto-flow / 20rem 20rem 20rem;
+    gap: 5rem;
+}
+
+.design-view {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.design-view-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.like-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.like-button {
+    color: white;
+    cursor: pointer;
+    width: 5rem;
+    height: 2rem;
+}
+
+.switch-floor {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.pagination-controls {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    gap: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}

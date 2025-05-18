@@ -10,8 +10,7 @@
 
 .item-list-outer {
   background-color: $primary;
-  overflow: hidden; // wichtig: verhindert Überlauf der Scrollbar
-  width: 100%; // passt zur Breite von .item-picker
+  width: 100%;
 }
 
 .item-list {
@@ -22,7 +21,7 @@
   max-height: 40rem;
   overflow-y: auto;
   overflow-x: hidden;
-  padding-right: 6px; // optional: Platz für Scrollbar
+  padding-right: 6px;
 }
 
 .draggable-item {

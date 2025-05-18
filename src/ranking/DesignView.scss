@@ -1,0 +1,41 @@
+.design-view-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.design-view-grid {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.like-button {
+    color: white;
+    transition: color 0.3s;
+
+    &:hover {
+        color: rgb(173, 172, 172);
+    }
+}
+
+.liked-button {
+    color: rgb(0, 202, 67);
+    transition: color 0.3s;
+
+    &:hover {
+        color: rgb(1, 153, 52);
+    }
+}
+
+.disliked-button {
+    color: rgb(211, 36, 36);
+    transition: color 0.3s;
+
+    &:hover {
+        color: rgb(161, 26, 26);
+    }
+}
