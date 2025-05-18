@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import './planer-header.scss';
 import { auth, provider } from '../firebase'; 
 import { signInWithPopup, signOut, onAuthStateChanged, updateProfile } from 'firebase/auth';
+import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
 import Modal from 'react-bootstrap/Modal';
+import { useNavigate } from 'react-router-dom';
 
 const PlanerHeader = ({ onSelectBuilding }) => {
   const [user, setUser] = useState(null);
@@ -11,6 +13,7 @@ const PlanerHeader = ({ onSelectBuilding }) => {
   const [username, setUsername] = useState('');
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [showControlsDialog, setShowControlsDialog] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -46,18 +49,54 @@ const PlanerHeader = ({ onSelectBuilding }) => {
   
   const handleSaveUsername = async () => {
     if (username.trim()) {
+
+      const isValidUsername = /^[a-zA-Z0-9_]{3,20}$/.test(username.trim());
+      if (!isValidUsername) {
+        alert("Username must be 3–20 characters long and can only contain letters, numbers, and underscore (_).");
+        return;
+      }
+
+      const db = getFirestore();
+      const designsRef = collection(db, "designs");
+      const usernameQuery = query(designsRef, where("username", "==", username.trim()));
+      const existingUsers = await getDocs(usernameQuery);
+
+      // Wenn bereits ein Benutzer mit diesem Namen existiert (außer dir selbst)
+      const nameTaken = existingUsers.docs.some(doc => doc.id !== user.uid);
+
+      if (nameTaken) {
+        alert("Dieser Username ist bereits vergeben. Bitte wähle einen anderen.");
+        return;
+      }
+
+
       try {
         await updateProfile(auth.currentUser, {
           displayName: username,
         });
         setIsEditingUsername(false); 
         setUser({ ...user, displayName: username });
+        updateUsernameInDesigns(user.uid, username);
         console.log("Username updated successfully:", user);
       } catch (error) {
         console.error("Fehler beim Speichern des Usernamens:", error);
       }
     }
   };
+
+  const updateUsernameInDesigns = async (userId, newUsername) => {
+  const db = getFirestore();
+  const q = query(collection(db, "designs"), where("userId", "==", userId));
+  const snapshot = await getDocs(q);
+
+  const updates = snapshot.docs.map(async (docSnap) => {
+    await updateDoc(doc(db, "designs", docSnap.id), {
+      username: newUsername
+    });
+  });
+
+  await Promise.all(updates);
+};
 
   const toggleDropdown = () => {
     setShowDropdown(prev => !prev);
@@ -89,7 +128,7 @@ const PlanerHeader = ({ onSelectBuilding }) => {
 
   return (
     <header className='header-container'>
-      <h2 className='header-title'>Schedule I - Designer</h2>
+      <h2 className='header-title' onClick={() => navigate('/')}>Schedule I - Designer</h2>
 
       <div className='header-buttons-container'>
         <div 
@@ -100,16 +139,19 @@ const PlanerHeader = ({ onSelectBuilding }) => {
           <button className='header-button'>Properties</button>
           {showPropertiesDropdown && (
             <div className='properties-dropdown'>
-              <button onClick={() => handleGridChange('Motel')}>Motel</button>
-              <button onClick={() => handleGridChange('Sweatshop')}>Sweatshop</button>
-              <button onClick={() => handleGridChange('Bungalow')}>Bungalow</button>
-              <button onClick={() => handleGridChange('Barn')}>Barn</button>
-              <button onClick={() => handleGridChange('Docks')}>Docks</button>
-              <button onClick={() => handleGridChange('Storage')}>Storage</button>
+              <button onClick={() => { handleGridChange('Motel'); navigate('/'); }}>Motel</button>
+              <button onClick={() => { handleGridChange('Sweatshop'); navigate('/'); }}>Sweatshop</button>
+              <button onClick={() => { handleGridChange('Bungalow'); navigate('/'); }}>Bungalow</button>
+              <button onClick={() => { handleGridChange('Barn'); navigate('/'); }}>Barn</button>
+              <button onClick={() => { handleGridChange('Docks'); navigate('/'); }}>Docks</button>
+              <button onClick={() => { handleGridChange('Storage'); navigate('/'); }}>Storage</button>
             </div>
           )}
         </div>
-        <button className='header-button' onClick={() => onSelectBuilding('Ranking')}>Ranking</button>
+        <button className='header-button' onClick={() => {
+          onSelectBuilding('Ranking')
+          navigate('/ranking');
+        }}>Ranking</button>
       </div>
 
       <div className="login-section">

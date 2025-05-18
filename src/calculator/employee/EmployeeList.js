@@ -19,7 +19,6 @@ const EmployeeList = ({ layout }) => {
     };
 
     const formatPrice = (price) => {
-        console.log(price.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }));
         return price.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
     };
 
@@ -28,7 +27,7 @@ const EmployeeList = ({ layout }) => {
         return (count === 0 ? 0 : Math.ceil(count / 4));
       };
       const chemistDailyPrice = () => {
-        return chemistAmount() === 0 ? 0 : (chemistAmount() * 200);
+        return chemistAmount() === 0 ? 0 : (chemistAmount() * 300);
     };
     
     const chemistPrice = () => {
@@ -40,7 +39,7 @@ const EmployeeList = ({ layout }) => {
         return (count === 0 ? 0 : Math.ceil(count / 3));
       };
       const cleanerDailyPrice = () => {
-        return cleanerAmount() === 0 ? 0 : (cleanerAmount() * 200);
+        return cleanerAmount() === 0 ? 0 : (cleanerAmount() * 100);
     };
     
     const cleanerPrice = () => {

@@ -9,6 +9,9 @@ import ItemPicker from './item-picker/ItemPicker';
 import ReactGA from 'react-ga4';
 import Calculator from './calculator/Calculator';
 import RankingOverview from './ranking/RankingOverview';
+import Footer from './footer/Footer';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import DesignView from './ranking/DesignView';
 
 function App() {
   const [selectedBuilding, setSelectedBuilding] = useState('Barn');
@@ -24,27 +27,36 @@ function App() {
     setLayout([]);
     setLayoutUf([]);
   };
-  const renderSelected = () => {
-    switch (selectedBuilding) {
-      case 'Ranking':
-        return <RankingOverview/>;
-      default:
-        return       <div className="app-content">
-        <DndProvider backend={HTML5Backend}>
-          <ItemPicker items={furnitureItems} />
-          <CustomGrid selectedBuilding={selectedBuilding} layout={layout} setLayout={setLayout} layoutUf={layoutUf} setLayoutUf={setLayoutUf}/>
-        </DndProvider>
-        <div className='tutorial'>
-          <Calculator layout={[...layout, ...layoutUf]} />
-        </div>
-    </div>;
-    }
-  };
-
   return (
     <div className="App">
-      <PlanerHeader onSelectBuilding={handleSelectBuilding} />
-      {renderSelected()}
+      <div className='first-view'>
+        <PlanerHeader onSelectBuilding={handleSelectBuilding} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <div className="app-content">
+                <DndProvider backend={HTML5Backend}>
+                  <ItemPicker items={furnitureItems} />
+                  <CustomGrid
+                    selectedBuilding={selectedBuilding}
+                    layout={layout}
+                    setLayout={setLayout}
+                    layoutUf={layoutUf}
+                    setLayoutUf={setLayoutUf}
+                  />
+                </DndProvider>
+                <div className='tutorial'>
+                  <Calculator layout={[...layout, ...layoutUf]} />
+                </div>
+              </div>
+            }
+          />
+          <Route path="/ranking" element={<RankingOverview />} />
+          <Route path="/design/:id" element={<DesignView />} />
+        </Routes>
+      </div>
+      <Footer />
     </div>
   );
 }

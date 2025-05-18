@@ -14,6 +14,8 @@ import { getAuth } from "firebase/auth";
 const CustomGrid = ({ selectedBuilding, layout, setLayout, layoutUf, setLayoutUf }) => {
   const [floor, setFloor] = useState(0);
   const [showControlsDialog, setShowControlsDialog] = useState(false);
+  const [showUploadDialog, setShowUploadDialog] = useState(false);
+  const [designTitle, setDesignTitle] = useState("");
 
   const renderSelectedGrid = () => {
     const gridProps = { layout, setLayout, layoutUf, setLayoutUf, floor }; 
@@ -31,7 +33,7 @@ const CustomGrid = ({ selectedBuilding, layout, setLayout, layoutUf, setLayoutUf
       case 'Storage':
         return <StorageGrid {...gridProps} />;
       default:
-        return <div>Select a Grid</div>;
+        return <BarnsGrid {...gridProps} />;
     }
   };
 
@@ -65,22 +67,36 @@ const CustomGrid = ({ selectedBuilding, layout, setLayout, layoutUf, setLayoutUf
       alert("You have reached the upload limit of 10 designs per week.");
       return;
     }
-  
+
+    if (!designTitle.trim()) {
+      alert("Please enter a valid title.");
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9 _\-]{3,50}$/.test(designTitle.trim())) {
+      alert("Title must be 3–50 characters and only contain letters, numbers, spaces, - or _.");
+      return;
+    }
+
     // Allow upload
     try {
       const cleanLayout = layout.map(({ x, y, type, rotation }) => ({ x, y, type, rotation }));
       const cleanLayoutUf = layoutUf.length > 0
         ? layoutUf.map(({ x, y, type, rotation }) => ({ x, y, type, rotation }))
         : null;
-  
+
       // Add selectedBuilding to the upload
       await addDoc(collection(db, "designs"), {
         userId: user.uid,
         username: user.displayName,
+        title: designTitle,
         layout: cleanLayout,
         layoutUf: cleanLayoutUf,
         property: selectedBuilding, 
-        likes: 0,
+        likes: 0, 
+        dislikes: 0, 
+        likedBy: [],
+        dislikedBy: [],   
         createdAt: serverTimestamp()
       });
   
@@ -90,9 +106,6 @@ const CustomGrid = ({ selectedBuilding, layout, setLayout, layoutUf, setLayoutUf
       alert("Error during upload. Please try again.");
     }
   };
-  
-  
-  
 
   return (
     <div className="grid-content">
@@ -107,24 +120,24 @@ const CustomGrid = ({ selectedBuilding, layout, setLayout, layoutUf, setLayoutUf
             Switch Floor
           </Button>
         )}
-          <Button
-            type='button'
-            size='lg'
-            onClick={() => setShowControlsDialog(true)}
-            className='btn btn-default'
-            style={{ marginLeft: '10px' }}
-          >
-            Controls
-          </Button>
-          <Button
-            type='button'
-            size='lg'
-            onClick={() => handleLayoutUpload()}
-            className='btn btn-default'
-            style={{ marginLeft: '10px' }}
-          >
-            Upload Design
-          </Button>
+        <Button
+          type='button'
+          size='lg'
+          onClick={() => setShowControlsDialog(true)}
+          className='btn btn-default'
+          style={{ marginLeft: '10px' }}
+        >
+          Controls
+        </Button>
+        <Button
+          type='button'
+          size='lg'
+          onClick={() => setShowUploadDialog(true)}
+          className='btn btn-default'
+          style={{ marginLeft: '10px' }}
+        >
+          Upload Design
+        </Button>
       </div>
       {renderSelectedGrid()}
       <Modal
@@ -143,6 +156,43 @@ const CustomGrid = ({ selectedBuilding, layout, setLayout, layoutUf, setLayoutUf
             <p>Press Delete to remove last dragged item</p>
           </div>
         </Modal.Body>
+      </Modal>
+      <Modal
+        show={showUploadDialog}
+        onHide={() => setShowUploadDialog(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Upload Design</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="upload-dialog">
+            <input
+              type="text"
+              placeholder="Enter a title for your design"
+              value={designTitle}
+              onChange={(e) => setDesignTitle(e.target.value)}
+              className="form-control"
+            />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowUploadDialog(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              handleLayoutUpload(designTitle);
+              setShowUploadDialog(false);
+            }}
+          >
+            Upload
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
   );

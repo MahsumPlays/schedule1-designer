@@ -1,0 +1,53 @@
+.design-preview-container {
+  width: 20rem;
+  height: 12rem;
+  border-radius: 1rem;
+  padding: 1rem;
+  background-color: #2b2b2b;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.design-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.design-username {
+  font-size: 0.9rem;
+  color: #bbbbbb;
+  margin-bottom: 0.8rem;
+}
+
+.design-rating {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+
+  .icon-like {
+    color: #00d26a;
+    margin-right: 0.3rem;
+  }
+
+  .icon-dislike {
+    color: #d34c4c;
+    margin-right: 0.3rem;
+  }
+
+  .rating-score {
+    margin-left: auto;
+    font-weight: bold;
+    color: #ffffff;
+  }
+}
