@@ -187,7 +187,7 @@ const useFurnitureDrop = ({
             // Neues Item mit leicht versetzter Position
             const rawNewItem = {
               ...itemToDuplicate,
-              i: `${itemToDuplicate.i}-${Date.now()}`,
+              i: `${itemToDuplicate.type}-${Date.now()}`,
               x: itemToDuplicate.x + 1,
               y: itemToDuplicate.y + 1,
             };

@@ -18,6 +18,7 @@ import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 const DesignView = ({ layout: initialLayout, layoutUf: initialLayoutUf, property: initialProperty, floor: initialFloor }) => {
   const { id } = useParams();
@@ -49,16 +50,16 @@ const DesignView = ({ layout: initialLayout, layoutUf: initialLayoutUf, property
   }, [id]);
 
 
-  const filledLayout = layout.map(item => {
-    const base = furnitureItems.find(f => f.type === item.type);
-    const i = `${item.type}-${Date.now()}`;
-    return base ? { ...base, ...item, i } : { ...item, i };
-  });
+const filledLayout = layout.map(item => {
+  const base = furnitureItems.find(f => f.type === item.type);
+  const i = `${item.type}-${uuidv4()}`;
+  return base ? { ...base, ...item, i } : { ...item, i };
+});
 
   const filledLayoutUf = Array.isArray(layoutUf)
     ? layoutUf.map(item => {
         const base = furnitureItems.find(f => f.type === item.type);
-        const i = `${item.type}-${Date.now()}`;
+        const i = `${item.type}-${uuidv4()}`;
         return base ? { ...base, ...item, i } : { ...item, i };
       })
     : [];
