@@ -43,7 +43,6 @@ const isOverlapping = (x, y, w, h, blockedCells) => {
     if (newItem.y + newItem.h > rows) {
       newItem.y = rows - newItem.h;
     }
-    console.log("EnforceGridBounds", newItem.x, newItem.y);
     return newItem;
   };
   

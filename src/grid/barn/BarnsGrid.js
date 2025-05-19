@@ -268,7 +268,6 @@ const totalBlockedCellsUf = [...blockedCellsUf, ...stairsUf];
           onDragStart={(layout, oldItem, newItem, placeholder, event, element) => {
             isDragging.current = true;
             setActiveItemKey(newItem.i);
-            console.log("active item",newItem.i)
           }}
           onDragStop={(layoutItems, oldItem, newItem) => {
             isDragging.current = false;
@@ -394,7 +393,6 @@ const totalBlockedCellsUf = [...blockedCellsUf, ...stairsUf];
           onDragStart={(layout, oldItem, newItem, placeholder, event, element) => {
             isDragging.current = true;
             setActiveItemKey(newItem.i);
-            console.log("active item",newItem.i)
           }}
           onDragStop={(layoutItems, oldItem, newItem) => {
             isDragging.current = false;
