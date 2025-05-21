@@ -3,7 +3,7 @@ import GridLayout from 'react-grid-layout';
 import '../CustomGrid.scss';
 import { handleDragStop, useFurnitureDrop, useKeyboardShortcuts } from '../../services/GridService';
 
-const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf, floor }) => {
+const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf, floor, keyboardShortcutsDisabled }) => {
   const cols = 37;
   const rows = 30;
   const colsUf = 18;
@@ -116,8 +116,9 @@ const totalBlockedCellsUf = [...blockedCellsUf, ...stairsUf];
     setLayoutKey: floor === 0 ? setLayoutKey : setLayoutKeyUf,
     cols: floor === 0 ? cols : colsUf,
     rows: floor === 0 ? rows : rowsUf,
+    disabled: keyboardShortcutsDisabled,
+    totalBlockedCells: floor === 0 ? totalBlockedCells : totalBlockedCellsUf,
   });
-
 
   const getCellBordersFree = (x, y) => {
     const isBlocked = (x, y) => freeCells.some(cell => cell.x === x && cell.y === y);
@@ -154,7 +155,6 @@ const totalBlockedCellsUf = [...blockedCellsUf, ...stairsUf];
         freeCellsEg.push({ x, y });
     }
   }
-
   return (
     <div className="custom-grid-container">
       {floor === 0 && (
@@ -271,6 +271,7 @@ const totalBlockedCellsUf = [...blockedCellsUf, ...stairsUf];
           }}
           onDragStop={(layoutItems, oldItem, newItem) => {
             isDragging.current = false;
+            setActiveItemKey(newItem.i);
               handleDragStop({
                 layoutItems: layoutItems,
                 oldItem: oldItem,
@@ -287,7 +288,6 @@ const totalBlockedCellsUf = [...blockedCellsUf, ...stairsUf];
           {layout.map(item => (
           <div
             key={item.i}
-            data-grid={{ x: item.x, y: item.y, w: item.w, h: item.h }}
             className="grid-item"
             style={{
               width: item.w * cellSize,
@@ -396,6 +396,7 @@ const totalBlockedCellsUf = [...blockedCellsUf, ...stairsUf];
           }}
           onDragStop={(layoutItems, oldItem, newItem) => {
             isDragging.current = false;
+            setActiveItemKey(newItem.i);
             handleDragStop({
               layoutItems: layoutItems,
               oldItem: oldItem,

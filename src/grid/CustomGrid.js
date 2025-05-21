@@ -18,7 +18,7 @@ const CustomGrid = ({ selectedBuilding, layout, setLayout, layoutUf, setLayoutUf
   const [designTitle, setDesignTitle] = useState("");
 
   const renderSelectedGrid = () => {
-    const gridProps = { layout, setLayout, layoutUf, setLayoutUf, floor }; 
+    const gridProps = { layout, setLayout, layoutUf, setLayoutUf, floor, keyboardShortcutsDisabled: showUploadDialog  }; 
     switch (selectedBuilding) {
       case 'Barn':
         return <BarnsGrid {...gridProps} />;

@@ -4,7 +4,7 @@ import '../CustomGrid.scss';
 import './BungalowGrid.scss';
 import { handleDragStop, useFurnitureDrop, useKeyboardShortcuts } from '../../services/GridService';
 
-const BungalowGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
+const BungalowGrid = ({ layout, setLayout, layoutUf, setLayoutUf, floor, keyboardShortcutsDisabled }) => {
   const cols = 24;
   const rows = 24;
   const cellSize = 25;
@@ -260,6 +260,8 @@ const BungalowGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
     setLayoutKey,
     cols,
     rows,
+    disabled: keyboardShortcutsDisabled,
+    totalBlockedCells
   });
   
   const getCellBordersFree = (x, y) => {

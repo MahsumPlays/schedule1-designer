@@ -4,7 +4,7 @@ import { handleDragStop, useFurnitureDrop, useKeyboardShortcuts } from '../../se
 import '../CustomGrid.scss';
 import './MotelGrid.scss';
 
-const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
+const MotelGrid = ({ layout, setLayout, layoutUf, setLayoutUf, floor, keyboardShortcutsDisabled }) => {
   const cols = 12;
   const rows = 10;
   const cellSize = 40;
@@ -68,6 +68,8 @@ const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
     setLayoutKey,
     cols,
     rows,
+    disabled: keyboardShortcutsDisabled,
+    totalBlockedCells
   });
   
   const getCellBordersFree = (x, y) => {
@@ -251,4 +253,4 @@ const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
   );
 }
 
-export default BarnsGrid;
+export default MotelGrid;

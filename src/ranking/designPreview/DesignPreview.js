@@ -27,7 +27,10 @@ const DesignPreview = ({ design, setSelectedDesign, selectedDesign }) => {
       <h4 className="design-title" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', textTransform: 'none'  }}>
         {design.title}
       </h4>
-      <p className="design-username" style={{ textTransform: 'none' }}>by {design.username}</p>
+      <div>
+        <p className="design-property" style={{ textTransform: 'none', marginBottom:"0" }}>{design.property}</p>
+        <p className="design-username" style={{ textTransform: 'none' }}>by {design.username}</p>
+      </div>
       <div className="design-rating">
         <FaThumbsUp className="icon-like" /> {design.likes || 0}
         <FaThumbsDown className="icon-dislike" style={{ marginLeft: '1rem' }} /> {design.dislikes || 0}

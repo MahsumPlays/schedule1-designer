@@ -4,7 +4,7 @@ import { handleDragStop, useFurnitureDrop, useKeyboardShortcuts } from '../../se
 import '../CustomGrid.scss';
 import './SweatshopGrid.scss';
 
-const SweatshopGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
+const SweatshopGrid = ({ layout, setLayout, layoutUf, setLayoutUf, floor, keyboardShortcutsDisabled }) => {
   const cols = 12;
   const rows = 18;
   const cellSize = 30;
@@ -100,6 +100,8 @@ const SweatshopGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
     setLayoutKey,
     cols,
     rows,
+    disabled: keyboardShortcutsDisabled,
+    totalBlockedCells
   });
 
   
@@ -239,18 +241,35 @@ const SweatshopGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
           }}
           onDragStop={(layoutItems, oldItem, newItem) => {
             isDragging.current = false;
-             handleDragStop({
-                layoutItems: layoutItems,
-                oldItem: oldItem,
-                newItem: newItem,
-                blockedCells: totalBlockedCells,
-                cols: cols,
-                rows: rows,
-                setLayout: setLayout,
-                setLayoutKey: setLayoutKey,
-                floor: 0,
-              });
-            }}
+
+            // Maximal erlaubte y-Position = rows - item.h (damit Item nicht rausgeht)
+            const maxY = rows - newItem.h;
+            if (newItem.y > maxY) {
+              newItem.y = maxY;
+            }
+
+            // Auch alle anderen Items im Layout prüfen (optional)
+            const fixedLayout = layoutItems.map(item => {
+              const maxYForItem = rows - item.h;
+              if (item.y > maxYForItem) {
+                return { ...item, y: maxYForItem };
+              }
+              return item;
+            });
+
+            handleDragStop({
+              layoutItems: fixedLayout,
+              oldItem: oldItem,
+              newItem: newItem,
+              blockedCells: totalBlockedCells,
+              cols: cols,
+              rows: rows,
+              setLayout: setLayout,
+              setLayoutKey: setLayoutKey,
+              floor: 0,
+            });
+          }}
+
         >
           {layout.map(item => (
           <div

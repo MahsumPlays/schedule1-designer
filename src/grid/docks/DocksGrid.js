@@ -4,7 +4,7 @@ import '../CustomGrid.scss';
 import './DocksGrid.scss';
 import { handleDragStop, useFurnitureDrop, useKeyboardShortcuts } from '../../services/GridService';
 
-const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf, floor }) => {
+const DocksGrid = ({ layout, setLayout, layoutUf, setLayoutUf, floor, keyboardShortcutsDisabled }) => {
   const cols = 40;
   const rows = 28;
   const colsUf = 28;
@@ -239,6 +239,8 @@ const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf, floor }) => {
     setLayoutKey: floor === 0 ? setLayoutKey : setLayoutKeyUf,
     cols: floor === 0 ? cols : colsUf,
     rows: floor === 0 ? rows : rowsUf,
+    disabled: keyboardShortcutsDisabled,
+    totalBlockedCells: floor === 0 ? totalBlockedCells : totalBlockedCellsUf,
   });
 
 
@@ -682,4 +684,4 @@ const BarnsGrid = ({ layout, setLayout, layoutUf, setLayoutUf, floor }) => {
   );
 }
 
-export default BarnsGrid;
+export default DocksGrid;

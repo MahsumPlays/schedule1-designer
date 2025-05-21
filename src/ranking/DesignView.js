@@ -50,19 +50,42 @@ const DesignView = ({ layout: initialLayout, layoutUf: initialLayoutUf, property
   }, [id]);
 
 
-const filledLayout = layout.map(item => {
-  const base = furnitureItems.find(f => f.type === item.type);
-  const i = `${item.type}-${uuidv4()}`;
-  return base ? { ...base, ...item, i } : { ...item, i };
-});
+  const filledLayout = layout.map(item => {
+    const base = furnitureItems.find(f => f.type === item.type);
+    const i = `${item.type}-${uuidv4()}`;
+
+    let merged = base ? { ...base, ...item } : { ...item };
+
+    // Falls Rotation 90° oder 270°, w und h vertauschen
+    if (item.rotation === 90 || item.rotation === 270) {
+      const temp = merged.w;
+      merged.w = merged.h;
+      merged.h = temp;
+    }
+
+    return { ...merged, i };
+  });
+
 
   const filledLayoutUf = Array.isArray(layoutUf)
     ? layoutUf.map(item => {
-        const base = furnitureItems.find(f => f.type === item.type);
-        const i = `${item.type}-${uuidv4()}`;
-        return base ? { ...base, ...item, i } : { ...item, i };
-      })
-    : [];
+      const base = furnitureItems.find(f => f.type === item.type);
+      const i = `${item.type}-${uuidv4()}`;
+
+      let merged = base ? { ...base, ...item } : { ...item };
+
+      // Falls Rotation 90° oder 270°, w und h vertauschen
+      if (item.rotation === 90 || item.rotation === 270) {
+        const temp = merged.w;
+        merged.w = merged.h;
+        merged.h = temp;
+      }
+
+      return { ...merged, i };
+    })
+  : [];
+
+
 
   const gridProps = {
     layout: filledLayout ? filledLayout : [],

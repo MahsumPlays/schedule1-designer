@@ -5,7 +5,7 @@ import '../CustomGrid.scss';
 import './StorageGrid.scss';
 import '../../styles/variables.scss';
 
-const StorageGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
+const StorageGrid = ({ layout, setLayout, layoutUf, setLayoutUf, floor, keyboardShortcutsDisabled }) => {
   const cols = 10;
   const rows = 19;
   const cellSize = 30;
@@ -57,6 +57,8 @@ const StorageGrid = ({ layout, setLayout, layoutUf, setLayoutUf }) => {
     setLayoutKey,
     cols,
     rows,
+    disabled: keyboardShortcutsDisabled,
+    totalBlockedCells,
   });
 
   

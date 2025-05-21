@@ -125,13 +125,13 @@ const useFurnitureDrop = ({
             i: `${item.type}-${Date.now()}`,
             x,
             y,
-            w: item.w,
-            h: item.h,
+            w: item.rotation === 0 || item.rotation === 180 ? item.h : item.w,
+            h: item.rotation === 0 || item.rotation === 180 ? item.w : item.h,
             name: item.name,
             price: item.price,
             type: item.type,
             image: item.image,
-            rotation: 0,
+            rotation: item.rotation || 0,
           };
           if (floorRef !== null) {
             if (floorRef.current === 0) {
@@ -152,26 +152,55 @@ const useFurnitureDrop = ({
   };
 
 
-  const useKeyboardShortcuts = ({ activeItemKey, setLayout, setLayoutKey, cols, rows }) => {
+  const useKeyboardShortcuts = ({ activeItemKey, setLayout, setLayoutKey, cols, rows, totalBlockedCells }) => {
     useEffect(() => {
       const handleKeyDown = (event) => {
         if (!activeItemKey) return;
   
-        if (event.key.toLowerCase() === 'r') {
-          setLayout(prev =>
-            prev.map(item =>
-              item.i === activeItemKey
-                ? {
-                    ...item,
-                    rotation: (item.rotation || 0) + 90 >= 360 ? 0 : (item.rotation || 0) + 90,
-                    w: item.h,
-                    h: item.w,
-                  }
-                : item
-            )
-          );
-          setLayoutKey(prev => prev + 1);
-        }
+if (event.key.toLowerCase() === 'r') {
+  setLayout(prev => {
+    return prev.map(item => {
+      if (item.i !== activeItemKey) return item; // Alle anderen Items unangetastet
+
+      // Neue Rotation
+      const newRotation = (item.rotation || 0) + 90 >= 360 ? 0 : (item.rotation || 0) + 90;
+      const newW = item.h;
+      const newH = item.w;
+
+      let rotatedItem = {
+        ...item,
+        rotation: newRotation,
+        w: newW,
+        h: newH,
+      };
+
+      // Nur das rotierte Item prüfen & ggf. verschieben
+      rotatedItem = enforceGridBounds(rotatedItem, cols, rows);
+
+      if (
+        isOverlapping(rotatedItem.x, rotatedItem.y, rotatedItem.w, rotatedItem.h, totalBlockedCells)
+      ) {
+        const newPos = findNearestValidPosition(
+          rotatedItem.w,
+          rotatedItem.h,
+          rotatedItem.x,
+          rotatedItem.y,
+          cols,
+          rows,
+          totalBlockedCells
+        );
+
+        rotatedItem.x = newPos.x;
+        rotatedItem.y = newPos.y;
+      }
+
+      return rotatedItem;
+    });
+  });
+
+  setLayoutKey(prev => prev + 1);
+}
+
   
         if (['Delete', 'Backspace'].includes(event.key)) {
           setLayout(prev => prev.filter(item => item.i !== activeItemKey));
