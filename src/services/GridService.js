@@ -235,7 +235,7 @@ if (event.key.toLowerCase() === 'r') {
       return () => {
         window.removeEventListener('keydown', handleKeyDown);
       };
-    }, [activeItemKey, setLayout, setLayoutKey, cols, rows]);
+    }, [activeItemKey, setLayout, setLayoutKey, cols, rows, totalBlockedCells]);
   };
   
   
