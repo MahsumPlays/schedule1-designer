@@ -2,6 +2,7 @@ export const furnitureItems = [
     { type: 'package1', name: 'Pakaging Station 1', w: 4, h: 2, image: '/images/ps1.png', price: 100},
     { type: 'package2', name: 'Pakaging Station 2', w: 4, h: 2, image: '/images/ps2.png', price: 750},
     { type: 'bed', name: 'Bed', w: 5, h: 3, image: '/images/bed.png', price: 150},
+    { type: 'locker', name: 'Locker', w: 3, h: 1, image: '/images/locker.png', price: 150},
     { type: 'storageL', name: 'Large  Storage', w: 4, h: 1, image: '/images/storageL.png', price: 60},
     { type: 'storageM', name: 'Medium Storage', w: 3, h: 1, image: '/images/storageM.png', price: 45},
     { type: 'storageS', name: 'Small Storage', w: 2, h: 1, image: '/images/storageM.png', price: 30},
