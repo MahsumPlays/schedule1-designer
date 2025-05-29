@@ -82,7 +82,7 @@ const StorageGrid = ({ layout, setLayout, layoutUf, setLayoutUf, floor, keyboard
     }
   }
 
-  
+
   return (
     <div className="custom-grid-container">
       <div
@@ -207,7 +207,9 @@ const StorageGrid = ({ layout, setLayout, layoutUf, setLayoutUf, floor, keyboard
           key={layoutKey}
           className="react-grid-layout"
           layout={layout}
-          cols={cols}
+          cols={cols}          
+          rows={rows}
+          maxRows={rows}
           rowHeight={cellSize}
           width={gridWidth}
           margin={[0, 0]}
