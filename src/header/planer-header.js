@@ -145,6 +145,7 @@ const PlanerHeader = ({ onSelectBuilding }) => {
               <button onClick={() => { handleGridChange('Barn'); navigate('/'); }}>Barn</button>
               <button onClick={() => { handleGridChange('Docks'); navigate('/'); }}>Docks</button>
               <button onClick={() => { handleGridChange('Storage'); navigate('/'); }}>Storage</button>
+              <button onClick={() => { handleGridChange('Manor'); navigate('/'); }}>Manor</button>
             </div>
           )}
         </div>

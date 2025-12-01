@@ -5,6 +5,7 @@ import BungalowGrid from './bungalow/BungalowGrid';
 import SweatshopGrid from './sweatshop/SweatshopGrid';
 import DocksGrid from './docks/DocksGrid';
 import StorageGrid from './storage/StorageGrid';
+import ManorGrid from './manor/ManorGrid';
 import './CustomGrid.scss';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -32,6 +33,8 @@ const CustomGrid = ({ selectedBuilding, layout, setLayout, layoutUf, setLayoutUf
         return <DocksGrid {...gridProps} />;
       case 'Storage':
         return <StorageGrid {...gridProps} />;
+      case 'Manor':
+        return <ManorGrid {...gridProps} />;
       default:
         return <BarnsGrid {...gridProps} />;
     }
